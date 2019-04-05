@@ -1,0 +1,31 @@
+#!/bin/bash
+#By tarnold
+
+PID=$(ps aux | grep nm-open+ | awk '{print $1" "$2}' | grep nm-open+ | cut -d" " -f2)
+if [[ -z $PID ]]; then
+   #echo "No VPN"
+   exit 0
+fi
+
+VPN=$(cat /proc/$PID/cmdline | cut -d"." -f2)
+
+icon=""
+INTERFACE="${BLOCK_INSTANCE:-tun}"
+
+PRESENT=$(ifconfig -a | grep -c "$INTERFACE")
+if [[ $PRESENT -eq 0 ]]; then
+   con=$(printf "%1s Device not found" $icon)
+   echo '<span foreground="#cc092f" font_desc="FontAwesome">'$con'</span>'   
+   exit 0
+fi
+
+STATUS=$(ifconfig $INTERFACE | grep -c "inet addr")
+if [[ $STATUS -eq 0 ]]; then
+   con=$(printf "%1s down" $icon)
+   echo '<span foreground="#cc092f" font_desc="FontAwesome">'$con'</span>'
+   exit 0
+fi
+
+IP=$(ifconfig | grep -A 1 $INTERFACE | tail -1 | cut -d ':' -f 2 | cut -d ' ' -f 1)
+con=$(printf "%1s %ls (%ls)" $icon $VPN $IP)
+echo '<span foreground="#bed600" font_desc="FontAwesome">'$con'</span>'

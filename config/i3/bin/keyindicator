@@ -1,0 +1,22 @@
+#!/bin/bash
+#By tarnold
+
+KEY="${BLOCK_INSTANCE:-"NUM"}"
+if [[ $KEY == "CAPS" ]]; then
+   STATUS=$(xset -q | grep "Caps Lock:" | awk '{print $4}')
+elif [[ $KEY == "NUM" ]]; then
+   STATUS=$(xset -q | grep "Num Lock:" | awk '{print $8}')
+elif [[ $KEY == "SCROLL" ]]; then
+   STATUS=$(xset -q | grep "Scroll Lock:" | awk '{print $12}')
+else
+   echo '<span foreground="#cc092f" font_desc="FontAwesome">'Unknown Key'</span>'
+   exit 0
+fi
+
+if [[ $STATUS == "off" ]]; then
+   echo '<span foreground="#4d4d4d" font_desc="FontAwesome">'" "$KEY" "'</span>'
+elif [[ $STATUS == "on" ]]; then
+   echo '<span foreground="#bed600" background="#4d4d4d" font_desc="FontAwesome">'" "$KEY" "'</span>'
+else
+   echo '<span foreground="#cc092f" font_desc="FontAwesome">'Unknown Status'</span>'
+fi

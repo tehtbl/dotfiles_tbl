@@ -1,0 +1,27 @@
+#!/bin/bash
+#By tarnold
+
+total=$(free -m | grep "Mem:" | awk '{print $2}')
+#used=$(free -m | grep "Mem:" | awk '{print $3}')
+#free=$(free -m | grep "Mem:" | awk '{print $4}')
+available=$(free -m | grep "Mem:" | awk '{print $7}')
+
+#usedpc=$(($used*100/$total))
+usedpc=$((100-($available*100/$total)))
+icon=" "
+#echo '<span foreground="#bed600" font_desc="FontAwesome">'$icon$usedpc%'</span>'
+
+if (( $(echo $loadall'> 90' | bc -l) )); then
+  echo '<span foreground="#cc092f" font_desc="FontAwesome">'$icon$usedpc%'</span>'
+elif (( $(echo $loadall'> 70' | bc -l) )); then
+  echo '<span foreground="#ff5a00" font_desc="FontAwesome">'$icon$usedpc%'</span>'
+else
+  echo '<span foreground="#bed600" font_desc="FontAwesome">'$icon$usedpc%'</span>'
+fi
+
+case $BLOCK_BUTTON in
+# 1 = Left,   2 = Middle, 3 = Right,       4 = Scroll Up,     5 = Scroll Down, 
+# 6 = Custom, 7 = Custom, 8 = Upper Thumb, 9 = Lower Thumb, 10+ = Custom)
+  1) $(gnome-system-monitor & disown);;
+  3) $(terminator -x zsh -c 'htop' & disown);;
+esac

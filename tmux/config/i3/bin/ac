@@ -1,0 +1,10 @@
+#!/bin/bash
+#By tarnold
+present=$(cat /sys/class/power_supply/AC/online)
+
+plug=""
+if [ "$present" == "1" ]; then
+  echo '<span foreground="#bed600" font_desc="FontAwesome">'$plug'</span>'
+else
+  echo '<span foreground="#cc092f" font_desc="FontAwesome">'$plug'</span>'
+fi
