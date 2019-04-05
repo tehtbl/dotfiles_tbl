@@ -40,8 +40,11 @@ ___git_dirty_flag() {
 
 CLEAR_ALL="\[\e[0;0m\]"
 RETVAL="\[\e[0;37;40m\][\$?]"
+
 #USER_HOST="\[\033[0;32m\]\u@( \[\033[0;34m\]\h \[\033[0;32m\])"
 USER_HOST="\[\e[0;32;40m\]\u@( \[\e[0;34;40m\]\h \[\e[0;32;40m\])"
+[[ ${UID} -eq 0 ]] && USER_HOST="\[\e[0;33;31m\]\u@( \[\e[0;34;40m\]\h \[\e[0;33;31m\])"
+
 FULLPATH="\[\e[34;40m\]\w"
 #GIT_CHECK="\[\e[0;37;40m\][\[\e[33;40m\]\$(___git_branch)\$(___git_dirty_flag)\[\e[37;40m\]\[\e[37;40m\]]"
 GIT_CHECK="\[\e[33;40m\]\$(___git_branch)\$(___git_dirty_flag)${CLEAR_ALL}"
