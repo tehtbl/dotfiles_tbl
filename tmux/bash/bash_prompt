@@ -1,0 +1,67 @@
+# My PS1 prompt.
+#    Normally:
+#       [user@host directory]
+#
+#    When logged in via SSH:
+#       [ssh:user@host directory]
+#
+#    When on in a git repo:
+#       [user@host directory branch]
+#
+#    When on a git repo with uncommitted changes:
+#       [user@host directory branch ⚑]
+#
+# Note: it might be worth ripping out more info such as the status.
+#   See https://github.com/robbyrussell/oh-my-zsh/blob/master/lib/git.zsh#L40
+
+
+___ssh_flag() {
+    if [ -n "$SSH_TTY" -a -n "$SSH_CONNECTION" ]; then echo '\[\e[0;33;40m\]ssh:'; fi
+}
+
+___git_branch() {
+  BRANCH=$(git branch --no-color 2> /dev/null)
+
+  [[ $? -eq 0 ]] && echo "${BRANCH}" | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1 /'
+}
+
+___git_dirty_flag() {
+  if [ x$(git config --get prompt.status) != xfalse ]; then
+    if [[ -n $(git status --porcelain '--ignore-submodules=dirty' 2>/dev/null) ]]; then
+      echo "⚑ "
+    fi
+  else
+    echo "«⋯» "
+  fi
+}
+
+# Note, to remove the bell, remove the \a near the end
+# PS1="\[\033[0;34m\][\A] \[\033[0m\][\$?] \[\033[0;32m\]\u@( \[\033[0;34m\]\h \[\033[0;32m\]) \[\033[0;34m\]\w \[\033[0m\]\$ "
+
+CLEAR_ALL="\[\e[0;0m\]"
+RETVAL="\[\e[0;37;40m\][\$?]"
+#USER_HOST="\[\033[0;32m\]\u@( \[\033[0;34m\]\h \[\033[0;32m\])"
+USER_HOST="\[\e[0;32;40m\]\u@( \[\e[0;34;40m\]\h \[\e[0;32;40m\])"
+FULLPATH="\[\e[34;40m\]\w"
+#GIT_CHECK="\[\e[0;37;40m\][\[\e[33;40m\]\$(___git_branch)\$(___git_dirty_flag)\[\e[37;40m\]\[\e[37;40m\]]"
+GIT_CHECK="\[\e[33;40m\]\$(___git_branch)\$(___git_dirty_flag)${CLEAR_ALL}"
+
+#PS1="\[\e[0;37;40m\][\$?] [\[\e[33;40m\]$(___ssh_flag)\[\e[0;36;40m\]\u@\h \[\e[33;40m\]\$(___git_branch)\$(___git_dirty_flag)\[\e[37;40m\]\[\e[37;40m\]]          \[\e[32;40m\]\w\[\e[0;0m\] $ "
+PS1="${RETVAL} $(___ssh_flag)${USER_HOST} ${FULLPATH} ${GIT_CHECK}\$ ${CLEAR_ALL}"
+
+
+
+
+PS2="\[\a\]"$PS2
+
+#---Colour codes---
+# In the form of \[\e[bold?;fg;bgm\]
+# YELLOW_GREYBG="\[\e[33;40m\]"
+# RED_GREYBG="\[\e[31;40m\]"
+# GREEN_GREYBG="\[\e[32;40m\]"
+# BLUE_GREYBG="\[\e[34;40m\]"
+# PURPLE_GREYBG="\[\e[35;40m\]"
+# WHITE_GREYBG="\[\e[37;40m\]"
+# CYAN_GREYBG="\[\e[36;40m\]"
+# COLOR_NONE="\[\e[0m\]"
+# COLOR_NONEP="\[\e[38;40m\]"

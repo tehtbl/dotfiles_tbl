@@ -1,0 +1,347 @@
+#
+# i3 config file (v4)
+#
+# Please see http://i3wm.org/docs/userguide.html for a complete reference!
+
+################################################################################
+################################################################################
+################################################################################
+
+# Windows-Key
+set $mod Mod4
+
+set $WS1 1: 
+set $WS2 2: 
+set $WS3 3: 
+set $WS4 4: 
+set $WS5 5: WS5
+set $WS6 6: WS6
+set $WS7 7: WS7
+set $WS8 8: WS8
+set $WS9 9: WS9
+set $WS0 0: ☠
+
+font pango:monospace 8, FontAwesome 8
+#font pango:Hasklug Nerd Font Mono 8
+#font pango:Droid Sans Mono for Powerline Nerd Font Complete 8
+#font pango:DejaVu Sans Mono 8
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# class                 border  backgr. text    indicator child_border
+client.focused          #bed600 #bed600 #000000 ##2e9ef4  #285577
+client.focused_inactive #a0a0a0 #a0a0a0 #000000 #484e50   #5f676a
+client.unfocused        #a0a0a0 #a0a0a0 #ffffff #292d2e   #222222
+client.urgent           #cc092f #cc092f #000000 #900000   #900000
+client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
+client.background       #ffffff
+
+# focus
+#focus_follows_mouse no
+mouse_warping output
+
+# popups
+popup_during_fullscreen smart
+
+################################################################################
+################################################################################
+################################################################################
+
+# change focus
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# splitting/layout
+bindsym $mod+h split h
+bindsym $mod+v split v
+bindsym $mod+f fullscreen toggle
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# switch to workspace
+bindsym $mod+1 workspace $WS1
+bindsym $mod+2 workspace $WS2
+bindsym $mod+3 workspace $WS3
+bindsym $mod+4 workspace $WS4
+bindsym $mod+5 workspace $WS5
+bindsym $mod+6 workspace $WS6
+bindsym $mod+7 workspace $WS7
+bindsym $mod+8 workspace $WS8
+bindsym $mod+9 workspace $WS9
+bindsym $mod+0 workspace $WS0
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $WS1
+bindsym $mod+Shift+2 move container to workspace $WS2
+bindsym $mod+Shift+3 move container to workspace $WS3
+bindsym $mod+Shift+4 move container to workspace $WS4
+bindsym $mod+Shift+5 move container to workspace $WS5
+bindsym $mod+Shift+6 move container to workspace $WS6
+bindsym $mod+Shift+7 move container to workspace $WS7
+bindsym $mod+Shift+8 move container to workspace $WS8
+bindsym $mod+Shift+9 move container to workspace $WS9
+bindsym $mod+Shift+0 move container to workspace $WS0
+
+# disable Titel bar for windows
+#for_window [class="^.*"] border pixel 3
+
+# new workspace
+bindsym $mod+n exec ~/.config/i3/bin/new_workspace.sh
+
+# move the whole workspace to the next outpt
+bindsym $mod+Control+Mod1+Right move workspace to output right
+bindsym $mod+Control+Mod1+Left move workspace to output left
+
+# cycle through workspaces
+bindsym Control+Mod1+Right workspace next
+bindsym Control+Mod1+Left workspace prev
+
+# kill windows
+bindsym $mod+Shift+q kill
+
+# reload the configuration file
+bindsym $mod+Shift+t reload
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+
+# Move workspaces between output
+bindsym $mod+c move workspace to output left
+bindsym $mod+Shift+c move workspace to output right
+# bindsym $mod+Tab focus right
+# bindsym $mod+Shift+Tab focus left
+
+# Scratchpad
+bindsym $mod+Shift+s move scratchpad
+bindsym $mod+s scratchpad show
+
+# funktion keys (get via xev)
+bindsym XF86AudioMute exec "amixer -D pulse set Master 1+ toggle && pkill -SIGRTMIN+10 i3blocks"
+bindsym XF86AudioLowerVolume exec "amixer set Master 5%- && pkill -SIGRTMIN+10 i3blocks"
+bindsym XF86AudioRaiseVolume exec "amixer set Master 5%+ && pkill -SIGRTMIN+10 i3blocks"
+bindsym XF86AudioMicMute exec "amixer set Capture toggle"
+bindsym XF86MonBrightnessUp exec "xbacklight -inc 3 && pkill -SIGRTMIN+9 i3blocks"
+bindsym XF86MonBrightnessDown exec "xbacklight -dec 3 && pkill -SIGRTMIN+9 i3blocks"
+
+# key indicator
+bindsym --release Caps_Lock exec pkill -SIGRTMIN+11 i3blocks
+bindsym --release Num_Lock  exec pkill -SIGRTMIN+11 i3blocks
+#bindsym --release Scroll_Lock  exec pkill -SIGRTMIN+11 i3blocks
+
+################################################################################
+################################################################################
+################################################################################
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+        #status_command i3status
+        tray_output primary
+        #----- own -----
+        position top
+        i3bar_command i3bar
+        status_command /usr/bin/i3blocks -c ~/.config/i3/i3blocks.conf
+        #font pango:SauceCodePro Nerd Font
+        ##font pango:Computer Modern Serif 10.5
+	      font pango:monospace 8, FontAwesome 8
+
+        colors {
+           statusline    #ffffff
+           background    #000000
+           separator     #000000
+           #                   BORDER       BACKGROUND   TEXT
+           focused_workspace   #bed60000    #4d4d4d00    #bed600
+           inactive_workspace  #0096db00    #4d4d4d00    #0096db
+           active_workspace    #0096db00    #4d4d4d00    #0096db
+           urgent_workspace    #cc092f00    #cc092f00    #000000
+           binding_mode        #ff5a0000    #ff5a0000    #000000
+        }
+}
+
+################################################################################
+################################################################################
+################################################################################
+
+# resize window (you can also use the mouse for that)
+bindsym $mod+r mode "$mode_resize"
+set $mode_resize Resize
+mode "$mode_resize" {
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym odiaeresis resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # smaler changes
+        bindsym Shift+j resize shrink width 1 px or 1 ppt
+        bindsym Shift+k resize grow height 1 px or 1 ppt
+        bindsym Shift+l resize shrink height 1 px or 1 ppt
+        bindsym Shift+odiaeresis resize grow width 1 px or 1 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Shift+Left resize shrink width 1 px or 1 ppt
+        bindsym Shift+Down resize grow height 1 px or 1 ppt
+        bindsym Shift+Up resize shrink height 1 px or 1 ppt
+        bindsym Shift+Right resize grow width 1 px or 1 ppt
+
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+################################################################################
+################################################################################
+################################################################################
+
+# shutdown menu
+bindsym $mod+Escape mode "$mode_system"
+set $mode_system SYSTEM: [l]ock, l[o]gout, [s]uspend, [h]ibernate, [r]eboot, [Shift+s]hutdown
+mode "$mode_system" {
+        bindsym l exec --no-startup-id $Locker, mode "default"
+        bindsym o exec --no-startup-id i3-msg exit, mode "default"
+        bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
+        bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
+        bindsym r exec --no-startup-id systemctl reboot, mode "default"
+        bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+################################################################################
+################################################################################
+################################################################################
+
+# display management
+bindsym $mod+x mode "$mode_display"
+set $mode_display Display mode: [w]ork [l]aptop
+mode "$mode_display" {
+    bindsym w exec --no-startup-id "\
+                ~/.screenlayout/work.sh"; \
+                mode "default"
+    bindsym l exec --no-startup-id "\
+		~/.screenlayout/laptop.sh"; \
+                mode "default"
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+################################################################################
+################################################################################
+################################################################################
+
+# Start App
+set $mode_launcher START: [f]irefox [c]chrome [t]hunderbird [b]urpSuite [n]autilus [m]attermost
+bindsym $mod+o mode "$mode_launcher"
+mode "$mode_launcher" {
+    bindsym f exec firefox; mode "default"
+    bindsym c exec chromium-browser; mode "default"
+    bindsym t exec thunderbird; mode "default"
+    bindsym b exec ~/bin/BurpSuitePro/BurpSuitePro; mode "default"
+    bindsym n exec nautilus; mode "default"
+    bindsym m exec ~/bin/mattermost-desktop-4.1.2/mattermost-desktop; mode "default"
+
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+}
+
+################################################################################
+################################################################################
+################################################################################
+
+# standard bindings
+bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+d exec ~/.config/i3/bin/startRofi.sh run
+bindsym $mod+less exec ~/.config/i3/bin/startRofi.sh window
+bindsym $mod+Shift+less exec ~/.config/i3/bin/startRofi.sh ssh
+
+# Start nautilus
+bindsym $mod+b exec nautilus
+
+# lockscreen
+bindsym $mod+y exec "~/.config/i3/bin/i3lock.sh"
+
+# start application floating (getting with xprop)
+for_window [class="Keepassx"] floating enable
+for_window [class="Nautilus"] floating enable
+for_window [class="Msgcompose"] floating enable
+
+for_window [class="burp-StartBurp"] floating enable
+for_window [class="burp-StartBurp" title="Burp Suite Professional v.*"] floating disable
+
+################################################################################
+################################################################################
+################################################################################
+
+# Workspace binding
+assign [class="keepassx"] → scratchpad
+assign [class="(?i)Chromium-browser"] $WS1
+assign [class="(?i)Mattermost"] $WS2
+assign [class="(?i)Firefox"] $WS3
+assign [class="(?i)Thunderbird"] $WS4
+assign [class="(?i)Burp Suite Professional"] $WS9
+
+################################################################################
+################################################################################
+################################################################################
+
+# wallpaper
+exec --no-startup-id feh --bg-fill ~/SW/00_stuff/swbackground3.png
+
+exec --no-startup-id nm-applet
+#exec --no-startup-id gnome-settings-daemon
+exec --no-startup-id gnome-keyring-daemon --start --components=pkcs11,gpg,secrets
+exec --no-startup-id "~/bin/mattermost-desktop-4.1.2/mattermost-desktop"
+exec --no-startup-id thunderbird
+exec --no-startup-id chromium-browser
+
+# # TODO: WS4 with new terminal and focus - ONLY IF at work place!
+# exec --no-startup-id i3-msg 'workspace $WS3; exec firefox'
+# exec --no-startup-id i3-msg 'workspace $WS5 output $PRIMARY; exec terminal'
+
+
+# Restore GNOME's settings
+exec --no-startup-id /usr/libexec/gnome-settings-daemon-localeexec
+# Fix a bug in gnome-settings-daemon: http://feeding.cloud.geek.nz/posts/creating-a-modern-tiling-desktop-environment-using-i3/
+exec --no-startup-id dconf write /org/gnome/settings-daemon/plugins/cursor/active false
+
+exec ".config/i3/bin/startScratchpad.sh"
+exec ".config/i3/bin/disable_touchpad.sh"
+# exec ".config/i3/bin/chk_layout.sh"
+
+#exec --no-startup-id "i3-msg '$WS2; append_layout ~/.config/i3/ws-2.json'"
+
+# TODO:
+# - dark GTK theme
+# - create cheatsheet
+# - drun auf mod+space
+# - info popups nur auf einem screen
+# - detect if at work or not
+
+# https://github.com/resloved/dots/blob/master/.config/i3/config
+# https://erikdubois.be/changing-icons-theme-cursor-i3/

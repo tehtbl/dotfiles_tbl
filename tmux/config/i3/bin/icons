@@ -1,0 +1,16 @@
+#!/bin/bash
+#By tarnold
+
+icon="📅 "
+icon+="📆 "
+icon+="🗓 "
+icon+="🔋"
+icon+="🔌 "
+icon+="🕒 "
+icon+=""
+icon+="🔇"
+icon+="🔈"
+icon+="🔉"
+icon+="🔊"
+
+echo '<span foreground="#bed600" font_desc="FontAwesome">'$icon'</span>'

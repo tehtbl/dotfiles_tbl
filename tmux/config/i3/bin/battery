@@ -1,0 +1,64 @@
+#!/bin/bash
+#By tarnold
+
+instance=$BLOCK_INSTANCE;
+if [ -z "$instance" ]; then
+  instance=$(echo "0")
+fi
+
+present=$(cat /sys/class/power_supply/BAT$instance/present)
+
+#echo "Instance: $instance" #debug
+#echo "Present: $present" #debug
+if [ "$present" == "1" ]; then
+  #state F[ull] C[harging] D[ischarging] U[nknown]
+  state=$(acpi | grep "Battery $instance" | cut -d' ' -f3 | cut -c1) 
+  charge=$(acpi | grep "Battery $instance" | cut -d' ' -f4 | cut -d"," -f1)
+  timeH=$(acpi | grep "Battery $instance" | cut -d' ' -f5 | cut -d"," -f1 | cut -d':' -f1)
+  timeM=$(acpi | grep "Battery $instance" | cut -d' ' -f5 | cut -d"," -f1 | cut -d':' -f2)
+  plugedin=$()
+ 
+  #echo "State: $state" #debug
+  #echo "Charge: $charge" #debug
+  #echo "Time $timeH:$timeM" #debug
+  bat0="" #<20
+  bat1="" #<40
+  bat2="" #<60
+  bat3="" #<80
+  bat4="" #>=80
+  up=""
+  down=""
+  out=""
+  label=""
+  #state="C" #debug
+  #charge="0%" #debug 
+  chargeN=$(echo $charge | cut -d'%' -f1)
+  if [[ $chargeN -lt 20 ]]; then
+    out+=$(echo '<span foreground="#cc092f" font_desc="FontAwesome">'$label $bat0 $charge)
+  elif [[ $chargeN -lt 40 ]]; then
+    out+=$(echo '<span foreground="#ff5a00" font_desc="FontAwesome">'$label $bat1 $charge)
+  elif [[ $chargeN -lt 60 ]]; then
+    out+=$(echo '<span foreground="#ffc82e" font_desc="FontAwesome">'$label $bat2 $charge)
+  elif [[ $chargeN -lt 80 ]]; then
+    out+=$(echo '<span foreground="#bed600" font_desc="FontAwesome">'$label $bat3 $charge)
+  else
+    out+=$(echo '<span foreground="#bed600" font_desc="FontAwesome">'$label $bat4 $charge)
+  fi
+  
+  if [[ "$state" == "C" ]]; then
+    out+=" $up($timeH:$timeM)"
+  elif [[ "$state" == "D" ]]; then
+    out+=" $down($timeH:$timeM)"
+  fi
+
+  out+=$(echo '</span>')
+  echo $out
+#else
+#  echo "FUCK" # debug
+fi
+
+#case $BLOCK_BUTTON in
+## 1 = Left,   2 = Middle, 3 = Right,       4 = Scroll Up,     5 = Scroll Down, 
+## 6 = Custom, 7 = Custom, 8 = Upper Thumb, 9 = Lower Thumb, 10+ = Custom)
+#  1) $(gnome-power-statistics & disown);;
+#esac
