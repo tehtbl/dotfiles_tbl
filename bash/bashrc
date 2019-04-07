@@ -9,11 +9,11 @@
 test -z "${HOST}" && HOST=`hostname` # && echo "set HOST=${HOST}"
 
 # if we can't find an agent, start one, and restart the script.
-if [ ! -S ~/.ssh/ssh_auth_sock ]; then
+if [ ! -S ~/tmp/ssh_auth_sock ]; then
   eval $(ssh-agent)
-  ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
+  ln -sf "$SSH_AUTH_SOCK" ~/tmp/ssh_auth_sock
 fi
-export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
+export SSH_AUTH_SOCK=~/tmp/ssh_auth_sock
 ssh-add -l > /dev/null || ssh-add
 
 # GPG Agent
@@ -25,7 +25,7 @@ eval $(gpg-agent &> /dev/null)
 # fi
 
 # Xmodmap
-[[ $OSTYPE =~ ^linux ]] && xmodmap "$HOME/.Xmodmap"
+[[ $OSTYPE =~ ^linux ]] && [[ -f `which xmodmap` ]] xmodmap "$HOME/.Xmodmap"
 
 # bash completion
 [ -r "/usr/local/etc/bash_completion" ] && source "/usr/local/etc/bash_completion"
