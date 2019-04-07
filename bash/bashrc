@@ -9,11 +9,11 @@
 test -z "${HOST}" && HOST=`hostname` # && echo "set HOST=${HOST}"
 
 # if we can't find an agent, start one, and restart the script.
-if [ ! -S /tmp/ssh_auth_sock ]; then
+if [ ! -S ~/.auth_sock_ssh ]; then
   eval $(ssh-agent)
-  ln -sf "$SSH_AUTH_SOCK" /tmp/ssh_auth_sock
+  ln -sf "$SSH_AUTH_SOCK" ~/.auth_sock_ssh
 fi
-export SSH_AUTH_SOCK=/tmp/ssh_auth_sock
+export SSH_AUTH_SOCK=~/.auth_sock_ssh
 ssh-add -l > /dev/null || ssh-add
 
 # GPG Agent
@@ -32,7 +32,7 @@ eval $(gpg-agent &> /dev/null)
 [ -r "/usr/share/bash-completion/bash_completion" ] && source "/usr/share/bash-completion/bash_completion"
 
 # dircolors
-which dircolors &>/dev/null && eval $(dircolors $HOME/.dircolors)
+which dircolors &>/dev/null && [[ -f "$HOME/.dircolors" ]] && eval $(dircolors $HOME/.dircolors)
 
 # editor
 export EDITOR="vim"
