@@ -76,7 +76,7 @@ if [[ "$OSTYPE" =~ ^darwin ]]; then
   alias top='top -o cpu'
 
   alias ls="command ls -hF"
-  alias ll='ls -lh'
+  alias ll='ls -lah'
 fi
 
 
