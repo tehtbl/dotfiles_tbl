@@ -1,6 +1,0 @@
-#!/bin/bash
-#By tarnold
-
-seperator+=""
-#seperator=""
-echo '<span foreground="#0096db" font_desc="FontAwesome">'$seperator'</span>'
